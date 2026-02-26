@@ -1,2 +1,2 @@
-# www -> apex redirect
-https://www.mrejinet.co.uk/*  https://mrejinet.co.uk/:splat  301
+# Redirects handled by Cloudflare DNS/domain binding:
+# - www.mrejinet.co.uk -> mrejinet.co.uk (automatic when both domains are bound)
