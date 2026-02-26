@@ -4,7 +4,7 @@ title: "mrejinet"
 
 ## Services
 
-- **[Grafana Dashboards](https://grafana.home.mrejinet.co.uk)** — Fleet monitoring, energy analytics, DNS analytics (requires login)
+- **[Grafana Dashboards](https://grafana.mrejinet.co.uk)** — Fleet monitoring, energy analytics, DNS analytics (requires login)
 
 ## Dashboards Available
 
