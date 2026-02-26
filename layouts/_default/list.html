@@ -1,11 +1,28 @@
 {{ define "main" }}
-<h1>{{ .Title }}</h1>
-{{ .Content }}
-{{ range .Pages }}
-<article>
-  <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-  {{ if .Date }}<time style="color: var(--muted); font-size: 0.85rem;">{{ .Date.Format "2 January 2006" }}</time>{{ end }}
-  {{ if .Summary }}<p>{{ .Summary }}</p>{{ end }}
-</article>
-{{ end }}
+<div style="max-width: 800px; margin: 0 auto;">
+  <header style="margin-bottom: 3rem; text-align: center;">
+    <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">{{ .Title }}</h1>
+    {{ if .Content }}<div style="color: var(--text-secondary); font-size: 1.1rem;">{{ .Content }}</div>{{ end }}
+  </header>
+
+  <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+    {{ range .Pages }}
+    <article class="glass-card" style="padding: 2rem;">
+      <h2 style="margin-top: 0; margin-bottom: 0.5rem;">
+        <a href="{{ .RelPermalink }}" style="color: var(--text-primary);">{{ .Title }}</a>
+      </h2>
+      <div
+        style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-muted); font-size: 0.9rem;">
+        <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+        <time>{{ .Date.Format "January 2, 2006" }}</time>
+      </div>
+      {{ if .Summary }}<p style="color: var(--text-secondary); margin: 0;">{{ .Summary }}</p>{{ end }}
+    </article>
+    {{ end }}
+  </div>
+</div>
 {{ end }}

@@ -1,3 +1,70 @@
 {{ define "main" }}
-{{ .Content }}
+<section class="hero">
+    <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">PiDNS <span
+            style="background: var(--accent-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Portal</span>
+    </h1>
+    <p>{{ .Site.Params.description }}</p>
+</section>
+
+{{ if .Params.services }}
+<section style="margin-top: 3rem;">
+    <h2>Active Services</h2>
+    <div class="card-grid">
+        {{ range .Params.services }}
+        <a href="{{ .url }}" class="glass-card" {{ if strings.HasPrefix .url "http" }}target="_blank"
+            rel="noopener noreferrer" {{ end }}>
+            <h3>
+                <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7">
+                    </path>
+                </svg>
+                {{ .name }}
+            </h3>
+            <p>{{ .desc }}</p>
+        </a>
+        {{ end }}
+    </div>
+</section>
+{{ end }}
+
+{{ if .Params.dashboards }}
+<section style="margin-top: 4rem;">
+    <h2>Available Dashboards</h2>
+    <div class="card-grid">
+        {{ range .Params.dashboards }}
+        <a href="https://grafana.mrejinet.co.uk{{ if .url }}{{ .url }}{{ else }}/d/{{ .uid }}{{ end }}" target="_blank"
+            rel="noopener noreferrer" class="glass-card">
+            <h3 style="color: var(--accent-secondary);">
+                <svg class="card-icon" style="color: var(--accent-secondary);" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                    </path>
+                </svg>
+                {{ .name }}
+            </h3>
+            <p>{{ .desc }}</p>
+        </a>
+        {{ end }}
+    </div>
+</section>
+{{ end }}
+
+<section style="margin-top: 4rem;">
+    <h2>Documentation</h2>
+    <div class="card-grid">
+        <a href="/status/" class="glass-card">
+            <h3 style="color: #4ade80;">
+                <svg class="card-icon" style="color: #4ade80;" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Fleet Status
+            </h3>
+            <p>Current health summary and status history of the PiDNS infrastructure.</p>
+        </a>
+    </div>
+</section>
 {{ end }}
