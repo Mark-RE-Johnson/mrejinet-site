@@ -1,0 +1,9 @@
+baseURL = "https://mrejinet.co.uk/"
+languageCode = "en-gb"
+title = "mrejinet"
+
+[build]
+  writeStats = true
+
+[params]
+  description = "Personal infrastructure portal"

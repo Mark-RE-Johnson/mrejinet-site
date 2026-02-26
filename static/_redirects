@@ -1,0 +1,2 @@
+# www -> apex redirect
+https://www.mrejinet.co.uk/*  https://mrejinet.co.uk/:splat  301

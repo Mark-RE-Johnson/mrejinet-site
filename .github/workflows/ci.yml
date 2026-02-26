@@ -1,0 +1,20 @@
+name: CI
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: '0.157.0'
+      - name: Build
+        run: hugo --minify
+      - name: Verify output
+        run: test -f public/index.html
