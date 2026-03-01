@@ -25,6 +25,13 @@
 - Use `rg` for plain text search or as MCP fallback when MCP cannot answer.
 - If MCP health is unclear, run `/Users/mark/bin/pidns-mcp-lsp-smoketest` before deeper analysis.
 
+## Service Access and Secrets Policy
+- For any task requiring credentials, API tokens, usernames/passwords, or secret material, consult `/Users/mark/bin/documents/PIDNS-SERVICE-ACCESS.md` first.
+- Treat `/Users/mark/bin/documents/PIDNS-SERVICE-ACCESS.md` as the canonical service-access registry for secret retrieval workflows.
+- Use the documented retrieval commands from the registry (for example, `pidns-vault get ...`) instead of inventing lookup paths or hardcoding secrets.
+- Do not store, echo, commit, or paste secret values into repo files, logs, or responses unless explicitly required by the operator for a secure handoff.
+- If the registry has no entry for a required service, or retrieval fails, stop guessing and surface the gap clearly so the operator can update access metadata.
+
 ## Parity and Drift Policy
 - Air and Pro must maintain exact operational parity for workflow-critical behavior.
 - Do not use one-host workarounds to simulate parity.
