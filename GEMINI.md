@@ -11,7 +11,17 @@
 ## Working Rules
 - Build with Hugo before release.
 - Keep content/layout/style changes scoped and verifiable.
-- Use `pidns-promote --mrejinet-site` flow for cross-device sync.
+- Use GitOps-only deployment flow for this repo.
+- Canonical docs:
+  - `/Users/mark/bin/documents/PIDNS-WEBSITE-SOLUTION.md`
+  - `/Users/mark/bin/documents/PIDNS-GIT-WORKFLOW.md`
+  - `/Users/mark/bin/documents/PIDNS-SOURCE-CONTROL-SOLUTION.md`
+- Canonical release path:
+  1. `hugo --minify`
+  2. `pidns-promote release --mrejinet-site --dry-run --description "what changed"`
+  3. `pidns-promote release --mrejinet-site --apply --description "what changed"`
+- `--apply` should push to `origin/main` (`pi74`), mirror-push to `github/main` by default, and refresh peer repo.
+- Do not deploy/sync this repo via ad-hoc copy methods (`cp`, `scp`, manual `rsync`, manual file drops). Escalate if GitOps tooling cannot perform a required action.
 
 ## Validation Commands
 ```bash
