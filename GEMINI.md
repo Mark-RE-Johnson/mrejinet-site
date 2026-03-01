@@ -1,9 +1,9 @@
 # mrejinet-site Guidance (Gemini)
 
 ## Shared Baseline (Read First)
-- Apply `AGENTS.md` in this repo before using this file.
+- Apply `CORE_AGENT_RULES.md` in this repo before using this file.
 - This file adds Gemini-specific workflow guidance only.
-- If instructions conflict, `AGENTS.md` wins.
+- If instructions conflict, `CORE_AGENT_RULES.md` wins.
 
 ## Repo Purpose
 - Production website source for `mrejinet.co.uk`.

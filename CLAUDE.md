@@ -1,9 +1,9 @@
 # mrejinet-site — Claude Instructions
 
 ## Shared Baseline (Read First)
-- Apply `AGENTS.md` in this repo before using this file.
+- Apply `CORE_AGENT_RULES.md` in this repo before using this file.
 - This file adds Claude-specific workflow guidance only.
-- If instructions conflict, `AGENTS.md` wins.
+- If instructions conflict, `CORE_AGENT_RULES.md` wins.
 
 ## Scope
 - Path: `/Users/mark/Projects/mrejinet-site`
