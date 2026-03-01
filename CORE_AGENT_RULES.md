@@ -38,6 +38,16 @@
 - Any symlink-based pattern is allowed only if it is documented architecture and applied identically on both clients.
 - If parity breaks, fix the root cause on the outlier client, then re-validate.
 
+## Post-Test Auto-Commit Policy (Mandatory)
+- After any significant task that changes repository content, create a commit automatically once validation/testing succeeds.
+- Significant changes include: code, scripts, config, JSON/YAML, workflow files, and documentation updates.
+- Commit messages must be explicit and outcome-oriented, describing what changed and why.
+- Commit only files directly related to the change just made.
+- Do not include unrelated pre-existing modified/untracked files in the same commit.
+- If multiple repos are changed, commit each repo independently after its checks pass.
+- If validation/testing has not passed, do not auto-commit as complete; resolve failures or report blockers first.
+- Operator override is allowed: if the user explicitly requests no commit or delayed commit, follow that instruction.
+
 ## Truthfulness and Grounding Policy (Mandatory)
 
 ### 1. Retrieval-Augmented Generation (RAG) First
