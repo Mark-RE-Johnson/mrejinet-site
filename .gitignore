@@ -13,5 +13,7 @@ Thumbs.db
 *.swp
 *.swo
 *~
-.vscode/
 .idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
