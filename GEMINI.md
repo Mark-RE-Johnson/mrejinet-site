@@ -28,3 +28,8 @@
 hugo --minify
 pidns-promote validate --mrejinet-site
 ```
+
+## MCP Routing by Language
+- HTML templates and CSS (`layouts/**/*.html`, `assets/css/*.css`): use `ast-grep` first for structure-aware queries and repeated pattern edits. Use `playwright` for rendered browser validation, navigation checks, screenshots, and DOM-level verification after changes.
+- Markdown content and TOML config (`content/**/*.md`, `hugo.toml`): use `rg` first. Do not default to `jcodemunch` or `cclsp` for content/config-only work in this repo.
+- Current repo language mix does not justify `jcodemunch` or `cclsp` as first-line tools. Reach for them only if supported JS/TS/Python source is later added and symbol-aware navigation becomes necessary.
