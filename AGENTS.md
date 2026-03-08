@@ -40,6 +40,12 @@
 - Keep tool descriptions concise, explicit, and non-overlapping so tool search can choose reliably.
 - For ChatGPT apps, treat local CLI MCP registration and ChatGPT remote apps as different delivery targets with different trust and approval surfaces.
 
+## Codex Native vs MCP Preference
+- Prefer native Codex capabilities when they clearly beat MCP for the same job: `exec_command` + `rg` for plain-text/file search, built-in `web` for general web research, and native shell `git` for normal repo-local Git work.
+- Prefer MCP when the capability is semantic or domain-specific: `cclsp`, `bash-intel`, `ast-grep`, and `jcodemunch` for code intelligence; `playwright`, `sqlite`, `prometheus`, and `homeassistant-*` for specialized systems.
+- Treat `fetch` as secondary to built-in `web` for broad internet research. Keep `fetch` for deterministic single-URL retrieval or workflows that specifically require the MCP server.
+- Treat `context7` as higher priority than generic web search for package/framework API docs when the task is library-specific and the `library` profile is active.
+
 ## MCP Routing by Language / File Type
 - Bash and Zsh: use `bash-intel` first for function index, scope-aware references, source graphs, and call hierarchy. Use `ast-grep` for structural shell queries. Use `cclsp` when you already have a concrete file/symbol and need definition, hover, rename, references, or diagnostics.
 - Python: use `jcodemunch` first for repo-wide symbol discovery, file outlines, and source retrieval. Use `cclsp` for definition/reference/rename/hover/diagnostics. Use `bash-intel` for Python call hierarchy. Use `ast-grep` for structural queries.
