@@ -25,6 +25,9 @@
 - Use `ast-grep` for structural AST queries.
 - Use text search (`rg` or agent built-in equivalent) for plain text search or as MCP fallback when MCP cannot answer.
 - Agents with deferred/lazy MCP tool loading (e.g., Claude Code `ToolSearch`) MUST load MCP tools on demand for semantic operations — do not skip MCP to avoid the loading step.
+- Keep the deployable MCP catalog and the active runtime tool surface separate: maintain the full supported catalog for reproducibility, but keep the active profile/tool subset as small as the current task allows.
+- On platforms that support tool search, lazy loading, or per-step allow-lists, prefer broad discovery plus narrow activation. Do not default to a full active MCP surface for routine work just because the client can defer schema loading.
+- When a platform supports approvals or read/write tool separation, keep sensitive write/action tools behind explicit approval or a narrower task-specific surface until trust is established.
 - If MCP health is unclear, run `/Users/mark/bin/pidns-mcp-lsp-smoketest` before deeper analysis.
 
 ## Service Access and Secrets Policy
