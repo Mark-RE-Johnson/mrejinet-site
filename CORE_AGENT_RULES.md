@@ -11,18 +11,20 @@
 - If guidance conflicts, `CORE_AGENT_RULES.md` wins.
 
 ## Search Commands (Strict)
-- Always use `rg` for text search.
-- Always use `rg --files` for file discovery.
-- Do not use `grep` for searching unless `rg` is unavailable.
-- If fallback is required, explicitly state why `rg` could not be used.
-- `find` is allowed for filesystem traversal tasks that are not text search.
+
+- Agents with built-in search tools (e.g., Claude Code's `Grep`, `Glob`) MUST use those instead of invoking `rg`/`grep`/`find` via shell. The built-in tools wrap `rg` internally and are preferred by the runtime.
+- Agents without built-in search tools (e.g., Codex, Gemini) MUST use `rg` for text search and `rg --files` for file discovery.
+- Do not use `grep` for searching unless `rg` is unavailable. If fallback is required, explicitly state why `rg` could not be used.
+- `find` is allowed for filesystem traversal tasks that are not text search, only when no built-in equivalent exists.
 
 ## MCP-First Code Intelligence Policy
-- For methods/functions/symbols/call hierarchy, use MCP tools first.
+
+- For methods/functions/symbols/call hierarchy, use MCP tools first. Fall back to text search only if MCP errors or returns no results.
 - Use `cclsp` for definition/reference/rename/hover and diagnostics.
 - Use `bash-intel` for Bash/Python call hierarchy and scope-aware references.
 - Use `ast-grep` for structural AST queries.
-- Use `rg` for plain text search or as MCP fallback when MCP cannot answer.
+- Use text search (`rg` or agent built-in equivalent) for plain text search or as MCP fallback when MCP cannot answer.
+- Agents with deferred/lazy MCP tool loading (e.g., Claude Code `ToolSearch`) MUST load MCP tools on demand for semantic operations — do not skip MCP to avoid the loading step.
 - If MCP health is unclear, run `/Users/mark/bin/pidns-mcp-lsp-smoketest` before deeper analysis.
 
 ## Service Access and Secrets Policy
@@ -47,6 +49,15 @@
 - If multiple repos are changed, commit each repo independently after its checks pass.
 - If validation/testing has not passed, do not auto-commit as complete; resolve failures or report blockers first.
 - Operator override is allowed: if the user explicitly requests no commit or delayed commit, follow that instruction.
+
+## Test Recovery Discipline (Mandatory)
+- After a structured or run-tracked test command fails, do not restart the entire suite by default.
+- First inspect the repo-native failure summary, triage output, or emitted recovery hints before choosing a rerun strategy.
+- Prefer targeted recovery controls in this order when the repo provides them:
+  1. Re-run from the first failing gate, phase, or stage.
+  2. Resume the previous run while preserving prior PASS/SKIP work.
+  3. Re-run only the previously failing tests or gates.
+- Use a fresh full rerun only when scope changed materially, the prior run state/fingerprint is unsafe or unavailable, environment/lane changed, or the user explicitly asks for a clean rerun.
 
 ## Truthfulness and Grounding Policy (Mandatory)
 
