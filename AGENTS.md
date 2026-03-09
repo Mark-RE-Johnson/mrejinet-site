@@ -45,11 +45,14 @@
 - Prefer MCP when the capability is semantic or domain-specific: `cclsp`, `bash-intel`, `ast-grep`, and `jcodemunch` for code intelligence; `playwright`, `sqlite`, `prometheus`, and `homeassistant-*` for specialized systems.
 - Treat `fetch` as secondary to built-in `web` for broad internet research. Keep `fetch` for deterministic single-URL retrieval or workflows that specifically require the MCP server.
 - Treat `context7` as higher priority than generic web search for package/framework API docs when the task is library-specific and the `library` profile is active.
+- Treat `pidns-docs` as the preferred read-only MCP for cross-repo or allowlisted local documentation lookup and bounded file fetch when it is registered.
+- Keep `rg` as the first choice for current-workspace docs/data search, or when the repo/path is already known and the fastest plain-text lookup matters. `pidns-docs` has a real stdio startup and first-call cache-fill cost even though warm calls are fast.
+- Prefer `jcodemunch` over `pidns-docs` `scope="all"` for indexed code/text search in repos that already have a `jcodemunch` index. Use `pidns-docs` `scope="all"` when you need one read-only surface across allowlisted repos, not as the default local code-search path.
 
 ## MCP Routing by Language / File Type
 - Bash and Zsh: use `bash-intel` first for function index, scope-aware references, source graphs, and call hierarchy. Use `ast-grep` for structural shell queries. Use `cclsp` when you already have a concrete file/symbol and need definition, hover, rename, references, or diagnostics.
 - Python: use `jcodemunch` first for repo-wide symbol discovery, file outlines, and source retrieval. Use `cclsp` for definition/reference/rename/hover/diagnostics. Use `bash-intel` for Python call hierarchy. Use `ast-grep` for structural queries.
 - TypeScript and JavaScript: use `jcodemunch` first for symbol discovery and source extraction. Use `ast-grep` for structural queries and batch search. Use `cclsp` only if a TS/JS language server is actually configured for the repo/runtime.
 - JSON, YAML, and TOML: use `ast-grep` for structural matching and `rg` for plain text search.
-- Markdown, plain text, CSV, and TSV: use `rg` first. Do not pay code-intel startup or indexing cost for docs/data-only work.
+- Markdown, plain text, CSV, and TSV: use `rg` first for current-workspace docs/data and known-target plain-text lookups. Use `pidns-docs` when you need read-only search/fetch across allowlisted local repos, need a bounded fetch outside the current workspace, or want one consistent read-only docs surface. Do not pay `jcodemunch` or `cclsp` startup/index cost for docs-only work, and do not prefer `pidns-docs` over `rg` just to search one repo you already have locally.
 - HTML and CSS: use `ast-grep` or `rg` for source inspection. Use `playwright` only when the task actually needs rendered browser validation and the active profile exposes it.
