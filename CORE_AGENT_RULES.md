@@ -10,6 +10,44 @@
 - Overlay files may add constraints but must not weaken this baseline.
 - If guidance conflicts, `CORE_AGENT_RULES.md` wins.
 
+## No Bandaids Policy (Mandatory)
+- Do not introduce shortcuts, bandaids, temporary shims, silent fallbacks, compatibility layers, symlink hot-fixes, or "just for now" source-selection logic.
+- Prefer a hard failure that exposes the defect over a soft success that hides it.
+- If a task uncovers a structural problem, pause the surrounding work and fix that problem properly before continuing.
+- Do not preserve legacy command flags, deprecated options, or compatibility aliases just to avoid updating callers. Update the callers and let stale usage fail clearly.
+- Do not add a second source of truth for infrastructure-critical behavior. Ambiguity is a defect, not a resilience feature.
+- If a touched area already contains a fallback or masking layer, remove it as part of the fix unless the user explicitly says not to.
+- The only exception is an active production emergency where service restoration cannot wait. In that case:
+  - make the minimum temporary change required to restore service,
+  - record it explicitly in the implementation plan as a dedicated cleanup phase,
+  - and do not mark the initiative complete until the temporary measure has been removed and replaced with the proper long-term fix.
+
+## Anti-Ambiguity Rule (Mandatory)
+- Never fix ambiguity by increasing acceptance. Fix it by removing ambiguity at the point of selection.
+- When a defect is caused by ambiguous, non-canonical, inferred, aliased, mirrored, fallback, cached, legacy, or otherwise alternate inputs reaching a component, fix the layer that selected or permitted that input.
+- Do not repair such defects by making downstream code accept more paths, more names, more flags, more env vars, more config keys, more source roots, or more input shapes.
+- Any change that broadens accepted inputs is presumed incorrect unless the architecture explicitly defines those inputs as equally canonical.
+- If a proposed fix uses normalization, auto-detection, alias support, path resolution, fallback search, compatibility behavior, or "accept either X or Y", stop and treat that as a likely policy violation.
+
+## Acceptance-Surface Check (Mandatory)
+- Before editing workflow-critical logic, determine whether the patch narrows accepted inputs, preserves accepted inputs, or broadens accepted inputs.
+- If the patch broadens accepted inputs, the patch is forbidden by default.
+- The correct fix is expected to live at the source-selection, caller, configuration, or data-definition layer unless the operator explicitly approves an architecture change.
+
+## Canonicality Checklist (Mandatory)
+- Before implementing a workflow-critical fix, explicitly identify:
+  - the single canonical source/state/input,
+  - the non-canonical or ambiguous source/state/input that was also being accepted,
+  - the layer that allowed the ambiguity: caller, config, resolver, parser, or consumer,
+  - and whether the patch narrows, preserves, or broadens acceptance.
+- If the answer is "broadens", stop and re-plan.
+- If the agent cannot state the canonical source and the ambiguity-permitting layer clearly, stop and ask instead of guessing.
+
+## Negative Regression Requirement (Mandatory)
+- For ambiguity bugs, add regression coverage that proves the canonical path works and the non-canonical or ambiguous path fails clearly.
+- Do not add a regression that treats acceptance of the non-canonical path as success unless that path has been explicitly promoted to canonical architecture.
+- Tests for ambiguity bugs should look for hidden fallback behavior, not celebrate it.
+
 ## Search Commands (Strict)
 
 - Agents with built-in search tools (e.g., Claude Code's `Grep`, `Glob`) MUST use those instead of invoking `rg`/`grep`/`find` via shell. The built-in tools wrap `rg` internally and are preferred by the runtime.
