@@ -1,0 +1,278 @@
+{{ define "main" }}
+<section class="hero" style="margin-bottom: 1rem;">
+    <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">Energy <span
+            style="background: var(--accent-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Analytics</span>
+    </h1>
+    <p>Comprehensive data analysis aligned with the Data Dictionary, period comparisons, and metric drill-downs.</p>
+</section>
+
+<section class="dashboard-controls glass-card" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; padding: 1rem; margin-bottom: 2rem;">
+    <div>
+        <label for="timePeriod" style="display: block; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.3rem; text-transform: uppercase; font-weight: 600;">Time Period</label>
+        <select id="timePeriod" class="glass-input">
+            <option value="30">Last 30 Days</option>
+            <option value="90">Last 90 Days</option>
+            <option value="365">Last 365 Days</option>
+            <option value="all">All Time</option>
+        </select>
+    </div>
+    <div id="loadingIndicator" style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); margin-left: auto;">
+        <svg class="spinner" viewBox="0 0 50 50" style="width: 20px; height: 20px; animation: spin 1s linear infinite;"><circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="5" stroke-dasharray="31.4 31.4" stroke-linecap="round"></circle></svg>
+        Processing Data...
+    </div>
+</section>
+
+<div class="analytics-layout" style="display: grid; grid-template-columns: minmax(300px, 340px) 1fr; gap: 2rem; align-items: start;">
+
+    <!-- Left Sidebar: KPIs -->
+    <aside class="kpi-sidebar" style="display: flex; flex-direction: column; gap: 1.5rem;">
+
+        <div class="kpi-group">
+            <h3 style="color: var(--text-secondary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">💰 Financials: True Costs</h3>
+            <div class="kpi-grid">
+                <div class="glass-card kpi-card clickable active" data-metric="totalCost">
+                    <h4>Total Energy Cost</h4>
+                    <div class="kpi-value" id="kpi-totalCost">£0.00</div>
+                    <div class="kpi-trend trend-neutral" id="trend-totalCost">-</div>
+                </div>
+                <div class="glass-card kpi-card clickable" data-metric="gridCost">
+                    <h4>Grid Elec Cost</h4>
+                    <div class="kpi-value" id="kpi-gridCost">£0.00</div>
+                    <div class="kpi-trend trend-neutral" id="trend-gridCost">-</div>
+                </div>
+                <div class="glass-card kpi-card clickable" data-metric="gasCost">
+                    <h4>Gas Cost</h4>
+                    <div class="kpi-value" id="kpi-gasCost">£0.00</div>
+                    <div class="kpi-trend trend-neutral" id="trend-gasCost">-</div>
+                </div>
+                <div class="glass-card kpi-card clickable" data-metric="evCost">
+                    <h4>EV Total Cost</h4>
+                    <div class="kpi-value" id="kpi-evCost">£0.00</div>
+                    <div class="kpi-trend trend-neutral" id="trend-evCost">-</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="kpi-group">
+            <h3 style="color: var(--text-secondary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">📈 Financials: Returns</h3>
+            <div class="kpi-grid">
+                <div class="glass-card kpi-card clickable" data-metric="exportIncome">
+                    <h4>Export Income</h4>
+                    <div class="kpi-value" id="kpi-exportIncome">£0.00</div>
+                    <div class="kpi-trend trend-neutral" id="trend-exportIncome">-</div>
+                </div>
+                <div class="glass-card kpi-card clickable" data-metric="batterySavings">
+                    <h4>Battery Savings</h4>
+                    <div class="kpi-value" id="kpi-batterySavings">£0.00</div>
+                    <div class="kpi-trend trend-neutral" id="trend-batterySavings">-</div>
+                </div>
+                <div class="glass-card kpi-card clickable" data-metric="solarValue">
+                    <h4>Solar Value</h4>
+                    <div class="kpi-value" id="kpi-solarValue">£0.00</div>
+                    <div class="kpi-trend trend-neutral" id="trend-solarValue">-</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="kpi-group">
+            <h3 style="color: var(--text-secondary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">⚡ Energy Flow: Volumes</h3>
+            <div class="kpi-grid">
+                <div class="glass-card kpi-card clickable" data-metric="electricity">
+                    <h4>Grid Import</h4>
+                    <div class="kpi-value" id="kpi-electricity">0</div>
+                    <div class="kpi-trend trend-neutral" id="trend-electricity">-</div>
+                </div>
+                <div class="glass-card kpi-card clickable" data-metric="solar">
+                    <h4>Solar Gen</h4>
+                    <div class="kpi-value" id="kpi-solar">0</div>
+                    <div class="kpi-trend trend-neutral" id="trend-solar">-</div>
+                </div>
+                <div class="glass-card kpi-card clickable" data-metric="gas">
+                    <h4>Gas Used</h4>
+                    <div class="kpi-value" id="kpi-gas">0</div>
+                    <div class="kpi-trend trend-neutral" id="trend-gas">-</div>
+                </div>
+                <div class="glass-card kpi-card clickable" data-metric="evCharge">
+                    <h4>EV Charge</h4>
+                    <div class="kpi-value" id="kpi-evCharge">0</div>
+                    <div class="kpi-trend trend-neutral" id="trend-evCharge">-</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="kpi-group">
+            <h3 style="color: var(--text-secondary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">📊 Efficiency & Ratios</h3>
+            <div class="kpi-grid">
+                <div class="glass-card kpi-card clickable" data-metric="gridDependency">
+                    <h4>Grid Dependency</h4>
+                    <div class="kpi-value" id="kpi-gridDependency">0%</div>
+                    <div class="kpi-trend trend-neutral" id="trend-gridDependency">-</div>
+                </div>
+                <div class="glass-card kpi-card clickable" data-metric="selfConsumption">
+                    <h4>Solar Self-Consumption</h4>
+                    <div class="kpi-value" id="kpi-selfConsumption">0%</div>
+                    <div class="kpi-trend trend-neutral" id="trend-selfConsumption">-</div>
+                </div>
+                <div class="glass-card kpi-card clickable" data-metric="offPeakPct">
+                    <h4>Off-Peak Ratio</h4>
+                    <div class="kpi-value" id="kpi-offPeakPct">0%</div>
+                    <div class="kpi-trend trend-neutral" id="trend-offPeakPct">-</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="kpi-group">
+            <h3 style="color: var(--text-secondary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">🚗 Tesla Insights</h3>
+            <div class="kpi-grid">
+                <div class="glass-card kpi-card clickable" data-metric="teslaDistance">
+                    <h4>Distance Driven</h4>
+                    <div class="kpi-value" id="kpi-teslaDistance">0 km</div>
+                    <div class="kpi-trend trend-neutral" id="trend-teslaDistance">-</div>
+                </div>
+                <div class="glass-card kpi-card clickable" data-metric="teslaEfficiency">
+                    <h4>Avg Efficiency</h4>
+                    <div class="kpi-value" id="kpi-teslaEfficiency">0 Wh/km</div>
+                    <div class="kpi-trend trend-neutral" id="trend-teslaEfficiency">-</div>
+                </div>
+                <div class="glass-card kpi-card clickable" data-metric="teslaSoC">
+                    <h4>Avg Battery SoC</h4>
+                    <div class="kpi-value" id="kpi-teslaSoC">0%</div>
+                    <div class="kpi-trend trend-neutral" id="trend-teslaSoC">-</div>
+                </div>
+            </div>
+        </div>
+
+    </aside>
+
+    <!-- Right Content: Charts & Tables -->
+    <main class="analytics-main" style="display: flex; flex-direction: column; gap: 2rem;">
+
+        <!-- Main Drilldown Chart -->
+        <div class="glass-card chart-container" style="position: relative; height: 480px; width: 100%; padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 id="mainChartTitle" style="margin: 0; font-size: 1.3rem; color: var(--text-primary);">Total Energy Cost Details</h3>
+                <div class="chart-options">
+                    <select id="chartType" class="glass-input" style="padding: 0.4rem 0.8rem; font-size: 0.9rem;">
+                        <option value="bar">Bar Chart</option>
+                        <option value="line">Line Chart</option>
+                    </select>
+                </div>
+            </div>
+            <div style="height: 380px;">
+                <canvas id="drilldownChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Period vs Period Comparison -->
+        <div class="glass-card chart-container" style="position: relative; height: 480px; width: 100%; padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <div>
+                    <h3 style="margin: 0; font-size: 1.3rem; color: var(--text-primary);">Period Comparison Overlay</h3>
+                    <p style="margin: 0.3rem 0 0 0; font-size: 0.85rem; color: var(--text-secondary);">Directly compare this period against the previous period.</p>
+                </div>
+                <div class="chart-options">
+                    <select id="compareMetric" class="glass-input" style="padding: 0.4rem 0.8rem; font-size: 0.9rem;">
+                        <!-- Options generated by JS -->
+                    </select>
+                </div>
+            </div>
+            <div style="height: 380px;">
+                <canvas id="comparisonChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Raw Data Table -->
+        <div class="glass-card table-container" style="width: 100%; padding: 1.5rem; overflow-x: auto;">
+            <h3 style="margin: 0 0 1rem 0; font-size: 1.2rem; color: var(--text-primary);">Raw Data Extract (Selected Period)</h3>
+            <table id="dataTable" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+                <thead>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.2); color: var(--text-secondary);">
+                        <th style="padding: 0.5rem;">Date</th>
+                        <th style="padding: 0.5rem; text-align: right;">Total Cost</th>
+                        <th style="padding: 0.5rem; text-align: right;">Grid Cost</th>
+                        <th style="padding: 0.5rem; text-align: right;">Export Inc</th>
+                        <th style="padding: 0.5rem; text-align: right;">Batt Savings</th>
+                        <th style="padding: 0.5rem; text-align: right;">Grid Dep %</th>
+                        <th style="padding: 0.5rem; text-align: right;">Self Cons %</th>
+                    </tr>
+                </thead>
+                <tbody id="dataTableBody">
+                    <!-- Rows injected via JS -->
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+</div>
+
+<!-- Include Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+<!-- Dashboard Logic -->
+<script src="/js/energy-dashboard.js"></script>
+
+<style>
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    .glass-input {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: var(--text-primary);
+        padding: 0.5rem 1rem;
+        font-family: 'Inter', sans-serif;
+        outline: none;
+        backdrop-filter: blur(10px);
+        font-size: 1rem;
+        transition: all 0.2s ease;
+    }
+    .glass-input:focus, .glass-input:hover {
+        border-color: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.08);
+    }
+    .glass-input option {
+        background: #1e1e1e;
+        color: white;
+    }
+
+    .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .kpi-card { padding: 1rem; transition: all 0.2s ease; }
+    .kpi-card[data-metric="totalCost"], .kpi-card[data-metric="teslaEfficiency"], .kpi-card[data-metric="teslaSoC"] { grid-column: span 2; }
+
+    .kpi-card.clickable {
+        cursor: pointer;
+        border: 1px solid rgba(255,255,255,0.05);
+    }
+    .kpi-card.clickable:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-2px);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+    .kpi-card.active {
+        background: rgba(59, 130, 246, 0.1);
+        border-color: #3b82f6;
+        box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+    }
+
+    .kpi-card h4 { margin: 0 0 0.5rem 0; color: var(--text-secondary); font-size: 0.8rem; font-weight: 500; }
+    .kpi-value { font-size: 1.6rem; font-weight: 700; margin: 0 0 0.5rem 0; color: var(--text-primary); }
+    .kpi-trend { font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.2rem 0.4rem; border-radius: 4px; background: rgba(0,0,0,0.2); }
+
+    .trend-up.good { color: #4ade80; }
+    .trend-down.good { color: #4ade80; }
+    .trend-up.bad { color: #f87171; }
+    .trend-down.bad { color: #f87171; }
+    .trend-neutral { color: var(--text-secondary); }
+
+    table th { font-weight: 600; }
+    table td { padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    table tr:hover td { background: rgba(255,255,255,0.02); }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+        .analytics-layout { grid-template-columns: 1fr; }
+        .kpi-card[style], .kpi-card[data-metric] { grid-column: auto; }
+    }
+</style>
+{{ end }}
