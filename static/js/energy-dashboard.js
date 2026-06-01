@@ -63,7 +63,7 @@ function formatValue(val, key) {
 document.addEventListener('DOMContentLoaded', () => {
     Chart.defaults.color = 'rgba(255, 255, 255, 0.7)';
     Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
-    Chart.defaults.font.family = "'Inter', sans-serif";
+    Chart.defaults.font.family = 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
 
     // Setup Compare Metric Options
     const compareSelect = document.getElementById('compareMetric');
