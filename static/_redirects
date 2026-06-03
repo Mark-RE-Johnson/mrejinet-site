@@ -1,2 +1,2 @@
-# Redirects handled by Cloudflare DNS/domain binding:
-# - www.mrejinet.co.uk -> mrejinet.co.uk (automatic when both domains are bound)
+# No static redirects are required for the protected website.
+# mrejinet.co.uk and www.mrejinet.co.uk are DNS-only CNAMEs to the Worker hostname.

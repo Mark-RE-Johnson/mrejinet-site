@@ -1,6 +1,6 @@
 # mrejinet-site
 
-Static website for [mrejinet.co.uk](https://mrejinet.co.uk), built with [Hugo](https://gohugo.io/) and deployed via [Cloudflare Pages](https://pages.cloudflare.com/).
+Static website for [mrejinet.co.uk](https://mrejinet.co.uk), built with [Hugo](https://gohugo.io/) and served by the `mrejinet-site` Cloudflare Worker assets deployment.
 
 ## Local development
 
@@ -18,8 +18,8 @@ Output is written to `public/`.
 
 ## Deployment
 
-Pushes to `main` trigger automatic deployment via Cloudflare Pages Git integration.
-PR branches get preview URLs at `<hash>.mrejinet-site.pages.dev`.
+Pushes to `main` are released through `pidns-promote release --mrejinet-site`.
+The public apex and `www` records are DNS-only CNAMEs to `mrejinet-site.rpnzgydm6h.workers.dev`; Cloudflare Access still gates both custom hostnames.
 
 ## Content
 
