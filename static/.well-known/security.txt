@@ -1,0 +1,4 @@
+Contact: mailto:mark.r.e.johnson@gmail.com
+Expires: 2027-06-03T00:00:00Z
+Preferred-Languages: en
+Canonical: https://mrejinet.co.uk/.well-known/security.txt
