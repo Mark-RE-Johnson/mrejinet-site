@@ -19,7 +19,7 @@ Output is written to `public/`.
 ## Deployment
 
 Pushes to `main` are released through `pidns-promote release --mrejinet-site`.
-The public apex and `www` records are DNS-only CNAMEs to `mrejinet-site.rpnzgydm6h.workers.dev`; Cloudflare Access still gates both custom hostnames.
+The public apex and `www` records are proxied CNAMEs to the `mrejinet-site` Worker. The direct Workers.dev route is disabled in `wrangler.toml` with `workers_dev = false` so the Worker cannot bypass the Cloudflare Access gate on the custom hostnames.
 
 ## Content
 

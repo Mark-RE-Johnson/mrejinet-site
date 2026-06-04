@@ -1,5 +1,6 @@
 name = "mrejinet-site"
 compatibility_date = "2026-02-26"
+workers_dev = false
 
 [assets]
 directory = "./public"
