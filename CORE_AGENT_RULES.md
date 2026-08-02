@@ -12,7 +12,7 @@
 
 ## Agent Policy File Sync (Mandatory)
 - Shared policy lives here. Runtime overlays (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`) and repo-local overlays (`AGENTS-REPO.md`) should reference this file instead of duplicating full shared rules.
-- The client copies of `CORE_AGENT_RULES.md` and `AGENTS.md` are canonical for the paired PiDNS client/runbook repos. Check byte parity with `pidns-ai-guidance-sync policy --check`; apply intentional paired changes with `pidns-ai-guidance-sync policy --apply` from a dev workspace.
+- The client copies of `CORE_AGENT_RULES.md` and `AGENTS.md` are the canonical shared-policy source for five exact code-owned roots: the client, its paired runbook, Home Assistant, mrejinet-site, and Budget. Check byte parity across all five roots with `pidns-ai-guidance-sync policy --check`; apply intentional shared-policy changes with `pidns-ai-guidance-sync policy --apply` from a dev workspace.
 - `pidns-promote core-rules` is retired. Policy synchronization is a source-maintenance operation, not a release operation, and must never discover or auto-commit arbitrary repositories.
 - When updating shared policy, check every top-level agent policy file in the same change and update either the canonical rule here or the affected overlay pointer/override.
 - If an overlay intentionally differs by runtime or repo, state the reason in the commit message or nearby docs so future agents do not "fix" the difference by guessing.
