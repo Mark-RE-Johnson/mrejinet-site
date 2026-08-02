@@ -17,16 +17,19 @@
 ```bash
 hugo server --buildDrafts
 hugo --minify
-pidns-promote release --mrejinet-site --dry-run --description "what changed"
-pidns-promote release --mrejinet-site --apply --description "what changed"
 ```
 
 ## Constraints
 - Keep layouts and content deterministic and buildable by Hugo.
 - Preserve security headers/redirects under `static/`.
-- Site deployment is GitOps-only: push through `pidns-promote release --mrejinet-site`, then Cloudflare deploys from `main`.
-- `--apply` should publish to `origin/main` (`pi74`), mirror-push to `github/main` by default, and refresh peer working copy.
-- Do not use ad-hoc deploy/sync paths for this repo (`cp`, `scp`, manual `rsync`, manual file drops). If workflow tooling cannot represent the needed deploy, stop and escalate.
+- Website development and publication are temporarily unavailable during the
+  Phase 5 break-before-make cutover. Read-only inspection and local builds are
+  allowed; do not edit, commit, push, or publish website source.
+- `pidns-promote release --mrejinet-site`, direct `git push`, manual
+  `wrangler deploy`, and ad-hoc copy/sync are retired as accepted paths.
+- Resume only after the shared development-workspace catalogue admits this
+  project. If that workflow is unavailable, stop and escalate; do not restore
+  or bypass the old route.
 
 ## MCP Routing by Language
 - HTML templates and CSS (`layouts/**/*.html`, `assets/css/*.css`): use `ast-grep` first for structure-aware queries and repeated pattern edits. Use `playwright` for rendered browser validation, navigation checks, screenshots, and DOM-level verification after changes.

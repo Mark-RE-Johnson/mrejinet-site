@@ -18,13 +18,18 @@ hugo server --buildDrafts
 ```
 
 ## Deployment Discipline (GitOps)
-- Active deployment mode is GitOps-only for site content: commit/push in `mrejinet-site`, then let Cloudflare auto-deploy from `main`.
-- Canonical release sequence:
-  1. `hugo --minify`
-  2. `pidns-promote release --mrejinet-site --dry-run --description "what changed"`
-  3. `pidns-promote release --mrejinet-site --apply --description "what changed"`
-- `--apply` is expected to push to `origin/main` (`pi74`), mirror-push to `github/main` by default, and refresh the peer repo working copy.
-- Do not use ad-hoc deployment paths (`cp`, `scp`, manual `rsync`, manual file drops) for this repo. If a required path is missing from GitOps tooling, escalate the workflow gap.
+- Website development and publication are temporarily unavailable during the
+  Phase 5 break-before-make cutover. Read-only inspection and local builds are
+  allowed; do not edit, commit, push, or publish website source.
+- The old `pidns-promote release --mrejinet-site` route, direct `git push`, and
+  manual `wrangler deploy` are no longer accepted development or publication
+  paths. Do not use aliases or ad-hoc copy/sync commands to bypass the cutover.
+- Development resumes only after the `mrejinet-site` project row is published
+  in the shared development-workspace catalogue. The admitted
+  `pidns-dev-workspace` journey and its typed GitOps adapter will then be the
+  sole authority.
+- If the shared workflow is unavailable, stop and report the gap. Do not restore
+  the retired route implicitly.
 
 ## Repo-Specific MCP Routing
 - `/Users/mark/Projects/mrejinet-site` is the deliberate primary folder for the website Codex project.

@@ -11,22 +11,22 @@
 ## Working Rules
 - Build with Hugo before release.
 - Keep content/layout/style changes scoped and verifiable.
-- Use GitOps-only deployment flow for this repo.
+- Website development and publication are temporarily unavailable during the
+  Phase 5 break-before-make cutover. Read-only inspection and local builds are
+  allowed; do not edit, commit, push, or publish website source.
 - Canonical docs:
   - `/Users/mark/bin/documents/PIDNS-WEBSITE-SOLUTION.md`
   - `/Users/mark/bin/documents/PIDNS-GIT-WORKFLOW.md`
   - `/Users/mark/bin/documents/PIDNS-SOURCE-CONTROL-SOLUTION.md`
-- Canonical release path:
-  1. `hugo --minify`
-  2. `pidns-promote release --mrejinet-site --dry-run --description "what changed"`
-  3. `pidns-promote release --mrejinet-site --apply --description "what changed"`
-- `--apply` should push to `origin/main` (`pi74`), mirror-push to `github/main` by default, and refresh peer repo.
-- Do not deploy/sync this repo via ad-hoc copy methods (`cp`, `scp`, manual `rsync`, manual file drops). Escalate if GitOps tooling cannot perform a required action.
+- `pidns-promote release --mrejinet-site`, direct `git push`, manual
+  `wrangler deploy`, and ad-hoc copy/sync are retired as accepted paths.
+- Resume only after the shared development-workspace catalogue admits this
+  project. If that workflow is unavailable, stop and escalate; do not restore
+  or bypass the old route.
 
 ## Validation Commands
 ```bash
 hugo --minify
-pidns-promote validate --mrejinet-site
 ```
 
 ## MCP Routing by Language
