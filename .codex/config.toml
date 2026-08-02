@@ -1,0 +1,38 @@
+# Portable mrejinet-site project MCP exposure only. User-level Codex config
+# owns commands, URLs, environment, credentials, and registrations.
+
+[mcp_servers.ast-grep]
+enabled = true
+
+[mcp_servers.bash-intel]
+enabled = false
+
+[mcp_servers.cclsp]
+enabled = false
+
+[mcp_servers.context7]
+enabled = true
+
+[mcp_servers.jcodemunch]
+enabled = false
+
+[mcp_servers.pidns-docs]
+enabled = true
+
+[mcp_servers.prometheus]
+enabled = false
+
+[mcp_servers.sqlite]
+enabled = false
+
+[mcp_servers.node_repl]
+enabled = true
+
+[mcp_servers.computer-use]
+enabled = false
+
+[mcp_servers.homeassistant-read]
+enabled = false
+
+[mcp_servers.homeassistant-admin]
+enabled = false
