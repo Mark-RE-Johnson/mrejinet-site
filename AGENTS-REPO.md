@@ -18,16 +18,16 @@ hugo server --buildDrafts
 ```
 
 ## Deployment Discipline (GitOps)
-- Website development and publication are temporarily unavailable during the
-  Phase 5 break-before-make cutover. Read-only inspection and local builds are
-  allowed; do not edit, commit, push, or publish website source.
+- The `mrejinet-site` catalogue row is admitted. Create all development work
+  with `pidns-dev-workspace create --project mrejinet-site <name>` and publish
+  only with `pidns-dev-workspace finish <name> --apply --release --description
+  "..."`.
 - The old `pidns-promote release --mrejinet-site` route, direct `git push`, and
-  manual `wrangler deploy` are no longer accepted development or publication
-  paths. Do not use aliases or ad-hoc copy/sync commands to bypass the cutover.
-- Development resumes only after the `mrejinet-site` project row is published
-  in the shared development-workspace catalogue. The admitted
-  `pidns-dev-workspace` journey and its typed GitOps adapter will then be the
-  sole authority.
+  manual `wrangler deploy` remain retired. Do not use aliases or ad-hoc
+  copy/sync commands to bypass the typed GitOps adapter.
+- Finish owns terminal validation, integration, the exact Git publication
+  receipt, the Cloudflare commit/version/deployment proof, and the final
+  Access/DNS/content audit.
 - If the shared workflow is unavailable, stop and report the gap. Do not restore
   the retired route implicitly.
 

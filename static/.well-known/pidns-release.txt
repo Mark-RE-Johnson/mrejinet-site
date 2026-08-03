@@ -1,0 +1,2 @@
+Phase 5 shared-workspace website release
+The homepage now identifies the PiDNS infrastructure, service health, and energy portal.

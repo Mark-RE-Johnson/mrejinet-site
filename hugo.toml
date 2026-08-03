@@ -6,4 +6,4 @@ title = "mrejinet"
   writeStats = true
 
 [params]
-  description = "Personal infrastructure portal"
+  description = "PiDNS infrastructure, service health, and energy portal"

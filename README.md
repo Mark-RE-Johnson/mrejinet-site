@@ -18,12 +18,15 @@ Output is written to `public/`.
 
 ## Deployment
 
-Website development and publication are temporarily unavailable during the
-Phase 5 break-before-make cutover. The former `pidns-promote release
---mrejinet-site`, direct `git push`, and manual `wrangler deploy` paths are no
-longer accepted. Work resumes only after this repository is admitted to the
-shared `pidns-dev-workspace` catalogue and its typed GitOps adapter becomes the
-sole publication authority.
+The repository is admitted to the shared development-workspace catalogue.
+Create work with `pidns-dev-workspace create --project mrejinet-site <name>` and
+publish it with `pidns-dev-workspace finish <name> --apply --release
+--description "..."`. The typed adapter waits for the official Cloudflare check
+at the exact Git commit, proves the resulting Worker version is serving 100% of
+traffic, and completes the production Access/DNS/content audit.
+
+The former `pidns-promote release --mrejinet-site`, direct `git push`, and
+manual `wrangler deploy` paths remain retired.
 
 The public apex and `www` records are proxied CNAMEs to the `mrejinet-site` Worker. The direct Workers.dev route is disabled in `wrangler.toml` with `workers_dev = false` so the Worker cannot bypass the Cloudflare Access gate on the custom hostnames.
 

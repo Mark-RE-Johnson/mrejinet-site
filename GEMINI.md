@@ -11,18 +11,18 @@
 ## Working Rules
 - Build with Hugo before release.
 - Keep content/layout/style changes scoped and verifiable.
-- Website development and publication are temporarily unavailable during the
-  Phase 5 break-before-make cutover. Read-only inspection and local builds are
-  allowed; do not edit, commit, push, or publish website source.
+- Create website work with `pidns-dev-workspace create --project mrejinet-site
+  <name>` and publish only with `pidns-dev-workspace finish <name> --apply
+  --release --description "..."`.
 - Canonical docs:
   - `/Users/mark/bin/documents/PIDNS-WEBSITE-SOLUTION.md`
   - `/Users/mark/bin/documents/PIDNS-GIT-WORKFLOW.md`
   - `/Users/mark/bin/documents/PIDNS-SOURCE-CONTROL-SOLUTION.md`
 - `pidns-promote release --mrejinet-site`, direct `git push`, manual
   `wrangler deploy`, and ad-hoc copy/sync are retired as accepted paths.
-- Resume only after the shared development-workspace catalogue admits this
-  project. If that workflow is unavailable, stop and escalate; do not restore
-  or bypass the old route.
+- Finish and its typed adapter own exact terminal proof, Git publication,
+  Cloudflare deployment evidence, and final production audit. If that workflow
+  is unavailable, stop and escalate; do not restore or bypass the old route.
 
 ## Validation Commands
 ```bash
