@@ -10,6 +10,7 @@ Read this file after `AGENTS.md`. This file holds repo-local guidance for the we
 - `/Users/mark/bin/documents/PIDNS-WEBSITE-SOLUTION.md` for deployment mode and Cloudflare behavior.
 - `/Users/mark/bin/documents/PIDNS-GIT-WORKFLOW.md` for promote/release command semantics.
 - `/Users/mark/bin/documents/PIDNS-SOURCE-CONTROL-SOLUTION.md` for canonical `pidns-promote` flow details.
+- `/Users/mark/bin/documents/PIDNS-CLIENT-DEV-ENVIRONMENT.md` for Codex skill ownership, project/global scope, and Air/Pro symlink parity.
 
 ## Build and Validation
 ```bash
