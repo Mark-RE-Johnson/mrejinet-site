@@ -32,7 +32,4 @@ enabled = true
 enabled = false
 
 [mcp_servers.homeassistant-read]
-enabled = false
-
-[mcp_servers.homeassistant-admin]
-enabled = false
+enabled = true
