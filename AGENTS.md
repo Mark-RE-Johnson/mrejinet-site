@@ -17,7 +17,7 @@
 ## Codex Project MCP Surface
 - A trusted local project loads the versioned `.codex/config.toml` from its deliberate primary folder. Exact project servers and primary-folder identity belong in `AGENTS-REPO.md`.
 - The project file owns only portable MCP enable/disable overrides. User-level Codex config remains the authority for commands, URLs, environment, credentials, and registrations.
-- Reviewed local-project definitions keep app-owned `node_repl` enabled because the Browser and Chrome plugins require it. Computer Use remains a separate surface.
+- Reviewed local-project definitions keep app-owned `node_repl` enabled because the Browser and Chrome plugins require it. Computer Use remains a separate plugin surface and must not appear as a project `mcp_servers` override.
 - Project config does not select named user profiles. ChatGPT Projects and secondary local-project folders do not discover this file.
 - Global `pidns-mcp-toggle` profiles remain useful registration/deployment vocabulary for other agents, but global Codex profile switching is not reliable task routing and must not drive a handoff.
 - A different Codex MCP set requires a reviewed project-local definition and a genuinely new trusted local task. Do not mutate a global profile and claim that a spawned task inherited it.
