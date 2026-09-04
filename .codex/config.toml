@@ -28,8 +28,5 @@ enabled = false
 [mcp_servers.node_repl]
 enabled = true
 
-[mcp_servers.computer-use]
-enabled = false
-
 [mcp_servers.homeassistant-read]
 enabled = true
