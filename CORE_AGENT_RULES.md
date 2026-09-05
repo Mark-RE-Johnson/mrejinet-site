@@ -1,75 +1,36 @@
 # CORE_AGENT_RULES.md
 
 ## Baseline Scope
-- This file is the mandatory baseline policy for all agents in this repo.
-- Overlay files are:
-  - `AGENTS.md` (Codex overlay)
-  - `CLAUDE.md` (Claude overlay)
-  - `GEMINI.md` (Gemini overlay)
-- Read this file first, then read the agent-specific overlay.
-- Overlay files may add constraints but must not weaken this baseline.
-- If guidance conflicts, `CORE_AGENT_RULES.md` wins.
+- Read this mandatory baseline before the runtime overlay (`AGENTS.md`, `CLAUDE.md`, or `GEMINI.md`). Overlays may specialize it but must not weaken it; CORE wins conflicts.
+- PiDNS `documents/...` references below belong to the task's bound PiDNS client checkout when doing PiDNS workspace work. From another project, read them in published `/Users/mark/bin/documents/`, not that project's directory. Choose by task ownership, never file-existence probing; this does not change code/test source-root authority.
+- Keep each rule at its canonical owner. Before guidance changes, read `documents/PIDNS-AGENT-ARCHITECTURE.md`, **Persona and Instruction Layering**, in the client repo. Use the relevant runtime chapters only for runtime changes.
+- Follow explicit task/action reading triggers in repo guidance. Read the relevant sections, not every linked manual. A required source that is missing or inconclusive blocks the dependent action; it does not make the rule optional.
 
 ## Agent Policy File Sync (Mandatory)
-- Shared policy lives here. Runtime overlays (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`) and repo-local overlays (`AGENTS-REPO.md`) should reference this file instead of duplicating full shared rules.
-- The client copies of `CORE_AGENT_RULES.md` and `AGENTS.md` are the canonical shared-policy source. The paired runbook and every validated external catalogue project's exact primary root are targets; the PiDNS catalogue row owns the source pair and is excluded from the external set. Check byte parity with `pidns-ai-guidance-sync policy --check`; stage the paired runbook with `policy --apply` from a PiDNS dev workspace, finish that workspace, then publish resumable external policy-only commits with `policy --publish` from clean published client source.
-- `pidns-promote core-rules` is retired. Policy synchronization is a source-maintenance operation, not a release operation, and must never discover or auto-commit arbitrary repositories.
-- When updating shared policy, check every top-level agent policy file in the same change and update either the canonical rule here or the affected overlay pointer/override.
-- If an overlay intentionally differs by runtime or repo, state the reason in the commit message or nearby docs so future agents do not "fix" the difference by guessing.
+- Client `CORE_AGENT_RULES.md` and `AGENTS.md` are canonical; overlays reference them instead of copying shared rules. Check every top-level runtime overlay when changing policy and explain intentional differences.
+- From the paired PiDNS workspace, stage runbook policy with `pidns-ai-guidance-sync policy --apply`. After finishing, use `policy --publish` from clean published client source for every validated external catalogue project's exact primary root; use `policy --check` for byte parity. The PiDNS catalogue row owns the source pair and is excluded from external targets.
+- This is source maintenance, not release-owned policy distribution. `pidns-promote core-rules` is retired; never discover or auto-commit arbitrary repositories. Procedure: the guidance architecture section named above.
 
 ## Dev Workspace Gate (Mandatory)
-- Live release roots are not feature-work scratchpads:
-  - `/Users/mark/bin`
-  - `/Users/mark/PiDNS/runbook-src`
-- If a task clearly requires PiDNS feature code, capability shards, deploy tooling, tests, workflow scripts, documentation edits, or unpublished deploy proof, move straight into a dev workspace. Do not spend a turn proving that the live-root gate will block.
-
-```bash
-pidns-dev-workspace list
-pidns-dev-workspace create <name>
-```
-
-- If the workspace already exists, use `pidns-dev-workspace create --reuse <name>` or `pidns-dev-workspace attach <name>`.
-- Use `pidns-dev-workspace preflight --mode feature --path "$PWD"` only when the current path or edit scope is ambiguous and you need the tool to classify it before editing.
-- Once in a workspace, confirm state as needed:
-
-```bash
-pidns-dev-workspace status <name>
-```
-
-- Feature work, documentation edits, and unpublished deploy testing must happen under `/Users/mark/.pidns/dev/<name>/bin` and `/Users/mark/.pidns/dev/<name>/runbook-src`.
-- `apply_patch` has no working-directory parameter. For dev workspace edits, patch headers must use absolute workspace paths such as `/Users/mark/.pidns/dev/<name>/bin/...` or `/Users/mark/.pidns/dev/<name>/runbook-src/...`; do not rely on shell `cwd` or relative filenames.
-- After every `apply_patch` batch in workspace work, run `git -C /Users/mark/bin status --short` and `git -C /Users/mark/PiDNS/runbook-src status --short`. The live roots must remain clean unless Mark explicitly requested an operator-approved hotfix or release/promote housekeeping.
-- If live roots changed accidentally, stop and revert only your own just-applied live-root edits after confirming there were no pre-existing user changes, then reapply with absolute workspace paths.
-- If a live root is already dirty, do not add more changes there or use it as a fallback. Report the dirty state and resolve, finish, commit, remove, or ask about the existing work before continuing.
-- Before creating another workspace, run `pidns-dev-workspace list`; normal `create` reports open managed workspaces and continues. Use `create --reuse <name>` or `attach <name>` when resuming existing work.
-- Use `pidns-dev-workspace deploy` / `verify` for unpublished deploys. Do not fall back to normal `pidnsq cap deploy --apply` when a workspace deploy is blocked.
-- When test/canary cannot prove a cap change, run `pidnsq cap proof-surface --cap <cap>` and use the named proof path first. If no unpublished proof path is adequate, finish and release the workspace, then deploy published source through the normal production lane. Do not make normal workspace deploy accept raw hosts, and do not bypass with lower-level `pidnsq`, `--incident-host-proof`, or `PIDNS_CAP_PROMOTE_VALIDATE=0`.
-- Use `pidns-dev-workspace finish --apply --release --description "<description>"` from inside the workspace to run its own read-only preflight, hand tested commits back to live `main`, publish the result, and then remove the workspace. `finish --dry-run` is an optional preview, not a mandatory duplicate gate. Do not hand-roll long Git merge recipes. Use plain `finish --apply` only when intentionally batching a separate reviewed `pidns-promote release`.
-- `pidns-promote release` publishes committed live `main`. It reports dirty/ahead dev workspaces as follow-up work, but isolated dev workspaces do not block the release queue.
-- Direct edits in the live roots are allowed only for explicit operator-approved hotfixes or release/promote housekeeping. Docs-only edits are not a live-root exception. When in doubt, stop and ask; do not quietly continue on `main`.
-- The live-root `pre-commit` hook enforces this by blocking unmarked live-root commits, including docs-only commits. If it blocks, move the work into a dev workspace; do not bypass it with `git commit --no-verify` unless Mark explicitly instructs an emergency override.
+- `/Users/mark/bin` and `/Users/mark/PiDNS/runbook-src` are live release roots, not scratchpads. PiDNS feature code, capability shards, deployment tooling, tests, workflow scripts, documentation and unpublished proof belong in `/Users/mark/.pidns/dev/<name>/bin` and its paired `runbook-src`.
+- Before that work, read `documents/PIDNS-DEV-WORKSPACE-WORKFLOW.md` in the client repo. Run `pidns-dev-workspace list`, then create, reuse (`create --reuse <name>`) or attach the workspace. Do not first prove the live-root guard blocks. Use `preflight --mode feature --path` only for ambiguous scope/path; use `status` when state needs checking.
+- `apply_patch` has no cwd parameter: use absolute workspace patch paths. After each patch batch, check `git -C /Users/mark/bin status --short` and `git -C /Users/mark/PiDNS/runbook-src status --short`. If an accidental live edit occurred, stop, distinguish pre-existing changes, revert only your own new edit and reapply in the workspace. Do not add work to dirty live roots or use them as fallback; resolve or ask about the existing state.
+- Unpublished deployment uses `pidns-dev-workspace deploy` / `verify`. If test/canary is insufficient, run `pidnsq cap proof-surface --cap <cap>` and use its named proof path. If none is adequate, finish/release first and deploy published source through the normal production lane. Never bypass the workspace guard with normal `pidnsq cap deploy --apply`, raw hosts, lower-level `pidnsq`, `--incident-host-proof`, or `PIDNS_CAP_PROMOTE_VALIDATE=0`.
+- Close ready work through `pidns-dev-workspace finish --apply --release --description "<description>"` inside the workspace; it owns preflight, tested-head handback, publication and removal. Dry-run is optional, not a duplicate mandatory gate. Do not hand-roll merge recipes. Plain `finish --apply` is only for intentionally batching a separate reviewed `pidns-promote release`.
+- Normal create reports existing workspaces; inspect/reuse the relevant one instead of hiding unfinished work. Dirty/ahead isolated workspaces remain visible follow-up work, but do not block release of committed live `main`.
+- Direct live-root edits require an explicit operator-approved hotfix or release/promote housekeeping; docs have no exception. If authority is unclear, stop and ask. A live-root pre-commit rejection means move into a workspace; `git commit --no-verify` requires Mark's explicit emergency override.
 
 ## Development Job Continuity (Optional)
-- One ordinary operator prompt is sufficient. Never ask Mark to paste a generic control block, policy preamble, status dump, or preparatory command. Load canonical policy from the versioned files named above.
-- `pidns-job` is an optional, small continuation note for long-running work, handoff, multiple sessions, campaigns, or work with several independently resumable steps. Short self-contained workspace work does not require one; a job may be started later if scope grows.
-- Keep only the literal request, objective, non-goals, workspace and scope references, concise checklist, accepted decisions, blockers, current state, next action, relevant heads, and timestamps. Update it at milestones or handoff, not after every command or commit.
-- A continuation note is never proof, mutation authority, release admission, measurement eligibility, or a workspace-lifecycle gate. Missing, stale, corrupt, or unwritable job state must be reported but cannot overturn valid Git, runner, merge, publication, or Health results.
-- Commits remain local and fast. The post-commit hook performs no proof, network publication, or per-commit WIP push. Use explicit `pidns-job checkpoint` or `handoff` only when a normal job branch or Git bundle is useful for recovery.
-- Checkpoint age is advisory. Elapsed time never invalidates source proof or blocks validation.
-- Before continuing an explicit `DEVJOB-*` reference, run `pidns-job resume <id>` and use its literal request, objective, invariants, current state, and next action. Git and workspace truth remain recoverable even when the note is unavailable.
-- Destructive workspace abandonment still requires verified recoverable Git or rescue-bundle state before deletion; continuation metadata is not the safety owner.
+- One ordinary prompt is enough; never request pasted policy, status dumps or generic control blocks. `pidns-job` is optional for long-running work, handoffs, campaigns or independently resumable steps, and may also be introduced later if scope grows.
+- Keep its note to the literal request, objective/non-goals, workspace/scope, concise checklist, decisions, blockers, current/next action, heads and timestamps. Update at milestones or handoff, not per command/commit.
+- A continuation note is never proof, mutation/release authority, measurement eligibility or a lifecycle gate. Report missing/stale/corrupt/unwritable notes without overruling valid Git, runner, publication or Health evidence. Age never invalidates source proof.
+- Before acting on an explicit `DEVJOB-*`, run `pidns-job resume <id>` and use its request, objective, invariants, state and next action; Git/workspace truth remains recoverable if the note is defective.
+- Commits stay local and fast; post-commit performs no proof, publication or WIP push. Use explicit checkpoint/handoff only for useful recovery. Destructive abandonment still requires verified recoverable Git or rescue-bundle state, not a continuation note.
 
 ## No Bandaids Policy (Mandatory)
-- Do not introduce shortcuts, bandaids, temporary shims, silent fallbacks, compatibility layers, symlink hot-fixes, or "just for now" source-selection logic.
-- Prefer a hard failure that exposes the defect over a soft success that hides it.
-- If a task uncovers a structural problem, classify it through the development-loop scope boundary below. Structural does not automatically mean current-scope, but it never permits a bandaid or hidden fallback.
-- Do not preserve legacy command flags, deprecated options, or compatibility aliases just to avoid updating callers. Update the callers and let stale usage fail clearly.
-- Do not add a second source of truth for infrastructure-critical behavior. Ambiguity is a defect, not a resilience feature.
-- If a touched area already contains a fallback or masking layer, remove it as part of the fix unless the user explicitly says not to.
-- The only exception is an active production emergency where service restoration cannot wait. In that case:
-  - make the minimum temporary change required to restore service,
-  - record it explicitly in the implementation plan as a dedicated cleanup phase,
-  - and do not mark the initiative complete until the temporary measure has been removed and replaced with the proper long-term fix.
+- Do not add temporary shims, silent fallbacks, compatibility layers, symlink hot-fixes or provisional source selectors. Expose defects instead of hiding them; keep one source of truth for infrastructure-critical behavior.
+- Update callers rather than preserving deprecated flags/options/aliases. Remove touched masking/fallback behavior unless the user says otherwise. Structural findings follow the development-loop scope boundary; structural does not automatically mean in scope.
+- The sole exception is an active production emergency that cannot wait: make the minimum restoration change, record a dedicated cleanup phase and do not claim completion until the temporary measure is replaced by the proper fix.
 
 ## Vendor Source Immutability (Mandatory)
 - Do not patch, rewrite, monkeypatch, or hotfix vendor-managed source checkouts during deployment.
@@ -78,11 +39,8 @@ pidns-dev-workspace status <name>
 - Any exception requires all of the following before implementation: named incident, expiry date, upstream issue or PR link, dedicated cleanup regression, and explicit operator approval.
 
 ## Anti-Ambiguity Rule (Mandatory)
-- Never fix ambiguity by increasing acceptance. Fix it by removing ambiguity at the point of selection.
-- When a defect is caused by ambiguous, non-canonical, inferred, aliased, mirrored, fallback, cached, legacy, or otherwise alternate inputs reaching a component, fix the layer that selected or permitted that input.
-- Do not repair such defects by making downstream code accept more paths, more names, more flags, more env vars, more config keys, more source roots, or more input shapes.
-- Any change that broadens accepted inputs is presumed incorrect unless the architecture explicitly defines those inputs as equally canonical.
-- If a proposed fix uses normalization, auto-detection, alias support, path resolution, fallback search, compatibility behavior, or "accept either X or Y", stop and treat that as a likely policy violation.
+- Fix ambiguity where the selector/caller/configuration/data admitted it, not by increasing downstream acceptance. Do not accept additional paths, names, flags, environment variables, keys, roots or shapes unless the architecture explicitly makes them equally canonical.
+- Normalization, auto-detection, aliases, path resolution, fallback search, compatibility or "accept either" fixes are presumed violations: stop and re-plan.
 
 ## Source Root Ownership (Mandatory)
 - In a dev workspace or test process, `PIDNS_BIN_DIR` is the exact client checkout and `PIDNS_RUNBOOK_BASE` is its exact paired runbook checkout. Workspace preparation and `pidns-test-run` own those bindings; child tests and commands must consume them without rediscovery, rewriting, sibling probing, or live-root fallback.
@@ -91,45 +49,23 @@ pidns-dev-workspace status <name>
 - Workspace and runner boundaries must clear destination variables and legacy source aliases before binding the canonical pair. Do not add a new alias, fallback, environment variable, resolver, symlink, receipt, proof, schema, contract, or service to work around source-root ambiguity.
 
 ## Acceptance-Surface Check (Mandatory)
-- Before editing workflow-critical logic, determine whether the patch narrows accepted inputs, preserves accepted inputs, or broadens accepted inputs.
-- If the patch broadens accepted inputs, the patch is forbidden by default.
-- The correct fix is expected to live at the source-selection, caller, configuration, or data-definition layer unless the operator explicitly approves an architecture change.
+- Before workflow-critical edits, classify acceptance as narrowing, preserving or broadening. Broadening is forbidden by default and requires explicit operator approval of the architecture change; fix source selection/callers/configuration/data instead.
 
 ## Canonicality Checklist (Mandatory)
-- Before implementing a workflow-critical fix, explicitly identify:
-  - the single canonical source/state/input,
-  - the non-canonical or ambiguous source/state/input that was also being accepted,
-  - the layer that allowed the ambiguity: caller, config, resolver, parser, or consumer,
-  - and whether the patch narrows, preserves, or broadens acceptance.
-- If the answer is "broadens", stop and re-plan.
-- If the agent cannot state the canonical source and the ambiguity-permitting layer clearly, stop and ask instead of guessing.
+- State the single canonical input/state, the ambiguous alternative, the admitting layer (caller/config/resolver/parser/consumer), and the acceptance classification. If it broadens, stop and re-plan; if ownership or ambiguity is unclear, stop and ask.
 
 ## Negative Regression Requirement (Mandatory)
-- For ambiguity bugs, add regression coverage that proves the canonical path works and the non-canonical or ambiguous path fails clearly.
-- Do not add a regression that treats acceptance of the non-canonical path as success unless that path has been explicitly promoted to canonical architecture.
-- Tests for ambiguity bugs should look for hidden fallback behavior, not celebrate it.
+- For ambiguity bugs, prove the canonical path succeeds and the ambiguous/non-canonical path fails. Test for hidden fallbacks; never turn their acceptance into the expected result without explicit promotion to canonical architecture.
 
 ## Search Commands (Strict)
-
-- Agents with built-in search tools (e.g., Claude Code's `Grep`, `Glob`) MUST use those instead of invoking `rg`/`grep`/`find` via shell. The built-in tools wrap `rg` internally and are preferred by the runtime.
-- Agents without built-in search tools (e.g., Codex, Gemini) MUST use `rg` for text search and `rg --files` for file discovery.
-- Do not use `grep` for searching unless `rg` is unavailable. If fallback is required, explicitly state why `rg` could not be used.
-- `find` is allowed for filesystem traversal tasks that are not text search, only when no built-in equivalent exists.
+- Use native file/text search when available (Claude `Grep`/`Glob`); otherwise use `rg` and `rg --files` (Codex/Gemini). Use `grep` only if `rg` is unavailable and disclose the fallback. Use `find` only for non-text traversal without a native equivalent.
 
 ## MCP-First Code Intelligence Policy
-
-- For methods/functions/symbols/call hierarchy, use MCP tools first. Fall back to text search only if MCP errors or returns no results.
-- Use `cclsp` for definition/reference/rename/hover and diagnostics.
-- Use `bash-intel` for Bash/Python call hierarchy and scope-aware references.
-- Use `ast-grep` for structural AST queries.
-- Use text search (`rg` or agent built-in equivalent) for plain text search or as MCP fallback when MCP cannot answer.
-- Agents with deferred/lazy MCP tool loading (e.g., Claude Code `ToolSearch`) MUST load MCP tools on demand for semantic operations — do not skip MCP to avoid the loading step.
-- For jcodemunch local repositories, first load/use `list_repos`. If the target local path or workspace is missing or stale, load/call `index_folder` with that local path. Use `index_repo` only for GitHub owner/repo strings or GitHub URLs; seeing `index_repo` first in deferred tool search is not evidence that local indexing is unsupported.
-- Keep the deployable MCP catalog and the active runtime tool surface separate: maintain the full supported catalog for reproducibility, but keep the active profile/tool subset as small as the current task allows.
-- On platforms that support tool search, lazy loading, or per-step allow-lists, prefer broad discovery plus narrow activation. Do not default to a full active MCP surface for routine work just because the client can defer schema loading.
-- When a platform supports approvals or read/write tool separation, keep sensitive write/action tools behind explicit approval or a narrower task-specific surface until trust is established.
-- Do not run MCP health/profile/status checks at thread start, after context compaction, or as routine preflight.
-- If an actual MCP tool failure or registration symptom makes MCP health unclear, run `/Users/mark/bin/pidns-mcp-lsp-smoketest` before deeper MCP-dependent analysis.
+- Use MCP first for semantic symbol/definition/reference/call-hierarchy work; fall back to text search only on error or no useful result. Use text search directly for plain text.
+- `cclsp` owns definition/reference/rename/hover/diagnostics, `bash-intel` Bash/Python hierarchy and scoped references, and `ast-grep` structural queries. Runtime overlays select the language-specific route.
+- Load deferred tools on demand; do not skip required semantic tools to avoid discovery. For local jcodemunch, start with `list_repos`, then `index_folder` for a missing/stale exact local path. `index_repo` is for GitHub names/URLs only; a discovery result showing only that tool is a search miss, not missing local support.
+- Keep the deployable catalog complete and active tools narrow. Use discovery/allow-lists and read/write separation where supported; broad discovery does not justify full routine activation. Keep sensitive actions behind the applicable approval or task-specific surface.
+- Do not run MCP health/profile/status checks at task start, after compaction or as routine preflight. An actual tool/registration failure justifies `/Users/mark/bin/pidns-mcp-lsp-smoketest` before deeper MCP-dependent analysis.
 
 ## Service Access and Secrets Policy
 - For any task requiring credentials, API tokens, usernames/passwords, or secret material, consult `/Users/mark/bin/documents/PIDNS-SERVICE-ACCESS.md` first.
@@ -147,20 +83,11 @@ pidns-dev-workspace status <name>
 - Privileged SSH dispatch must use `pidns-ssh --authority-ref <policy-entry> <user@host> --remote-argv /usr/bin/sudo -n <absolute-reviewed-command> [exact args...]`. The dispatcher must match inventory host/user, exact argv, non-interactive sudo shape, and the source-controlled policy entry before SSH. Native free-form privileged exceptions are not allowed.
 
 ## Complexity Budget and Simplify-First Decision (Mandatory)
-- Complexity is a production risk equal to correctness and security risk, but an increase in complexity is not automatically forbidden.
-- Before choosing an additive design, including a new feature, function, code/config path, service, timer, schema, receipt, framework, authority surface, or validation gate, apply this sequence within the affected boundary:
-  1. Inventory existing behavior, configuration, and ownership, including duplicate and near-duplicate implementations.
-  2. Remove duplication and simplify the existing design first where doing so preserves required behavior.
-  3. Identify the residual problem that consolidation or simplification cannot solve.
-  4. Add something only when it provides distinct, measurable value worth its operational, failure, maintenance, and validation cost.
-  5. Record the direct before/after delta so the trade-off is visible; an increase is evidence to assess, not an automatic rejection.
-- Prefer deletion, consolidation, or clean extension of the existing canonical owner. Do not create a parallel owner or source of truth merely because a separate component is easier to add.
-- Do not manufacture deletions, combine unrelated responsibilities, or weaken required behavior merely to reduce counts.
-- A user instruction to simplify, reduce scope, or stop architecture growth makes the sequence above mandatory and raises the burden of proof; it is not a blanket ban on justified additions.
-- Record the before/after change in production lines of code, files, concepts, and runtime components, together with the residual problem and expected value, in the task conversation; do not create a metric ledger, receipt, or other enforcement artifact.
-- If distinct value, non-duplication, or reasonable net benefit cannot be demonstrated, stop and re-plan. Explicit operator approval is still required when another policy or the task boundary requires it; an increase alone does not create that requirement.
-- Repeated course correction means abandon or roll back an invalidated draft, not keep refining the same assumption.
-- Non-causal or silent gates are defects in the proof system. Remove or repair them at that layer; do not use them to justify further application complexity.
+- Complexity is a production risk alongside correctness/security. Before adding a feature, function, config path, service, timer, schema, receipt, framework, authority or gate: inventory behavior/owners and duplicates; consolidate safely; identify the residual problem; add only distinct, measurable value worth its operational, failure, maintenance and validation cost.
+- Prefer deletion, consolidation or extension of the canonical owner. Do not manufacture deletions, merge unrelated responsibilities, weaken required behavior or create a parallel source of truth to improve a count.
+- When Mark says simplify/reduce scope/stop architecture growth, this sequence is binding and additions need stronger justification. An increase alone is not forbidden and does not require approval unless another policy or scope boundary does.
+- Report before/after production lines, files, concepts and runtime components, plus residual value, in the conversation; no metric ledger or enforcement artifact. If value/non-duplication/net benefit is unproven, stop and re-plan.
+- Repeated course correction means abandon or roll back the invalidated draft. Non-causal/silent proof gates are defects at their owner, not justification for application complexity or exceptions.
 
 ## Development-Loop Scope and Publication Boundary (Mandatory)
 - Use one common loop: request or audit -> choose scope, shape, and actual risk -> one managed workspace -> planner-selected runner proof on one clean terminal HEAD -> reversible commit(s) -> one compatible publication -> boundary-specific runtime/final audit where needed.
@@ -184,23 +111,10 @@ pidns-dev-workspace status <name>
 - If parity breaks, fix the root cause on the outlier client, then re-validate.
 
 ## Post-Test Auto-Commit Policy (Mandatory)
-- After any significant task that changes repository content, create a commit automatically once validation/testing succeeds.
-- Significant changes include: code, scripts, config, JSON/YAML, workflow files, and documentation updates.
-- Commit messages must be explicit and outcome-oriented, describing what changed and why.
-- Commit only files directly related to the change just made.
-- Do not include unrelated pre-existing modified/untracked files in the same commit.
-- If multiple repos are changed, commit each repo independently after its checks pass.
-- If validation/testing has not passed, do not auto-commit as complete; resolve failures or report blockers first.
-- Operator override is allowed: if the user explicitly requests no commit or delayed commit, follow that instruction.
+- Automatically commit significant related code, config, scripts, workflow or documentation changes after their validation succeeds, using outcome-oriented messages. Commit each changed repo independently, only task-owned files; preserve pre-existing work. If checks fail, resolve/report rather than committing as complete. Respect an explicit no-commit or delayed-commit request.
 
 ## Test Recovery Discipline (Mandatory)
-- After a structured or run-tracked test command fails, do not restart the entire suite by default.
-- First inspect the repo-native failure summary, triage output, or emitted recovery hints before choosing a rerun strategy.
-- Prefer targeted recovery controls in this order when the repo provides them:
-  1. Re-run from the first failing gate, phase, or stage.
-  2. Resume the previous run while preserving prior PASS/SKIP work.
-  3. Re-run only the previously failing tests or gates.
-- Use a fresh full rerun only when scope changed materially, the prior run state/fingerprint is unsafe or unavailable, environment/lane changed, or the user explicitly asks for a clean rerun.
+- After a structured/run-tracked failure, inspect native summaries/triage first. Prefer the valid first-failing gate, resume, only-failed or from-gate path and preserve prior PASS/SKIP work. A fresh full run needs materially changed scope, unsafe source/runtime fingerprint, a changed environment/lane or an explicit user request; never restart the suite by default.
 
 ## Validation Workflow (Mandatory)
 - The planner maps every changed path to a concrete risk boundary and selects one ordered, deduplicated command set. The runner executes that set and owns one PASS manifest bound to the exact clean terminal client HEAD and paired runbook HEAD.
@@ -213,33 +127,9 @@ pidns-dev-workspace status <name>
 - A new or renamed path that is unclassified, a stale PASS accepted for a new head, or a missing recovery route is a validation-workflow defect. Fix it with a planner/runner regression and regenerate the test matrix in the same branch.
 
 ## Truthfulness and Grounding Policy (Mandatory)
-
-### 1. Retrieval-Augmented Generation (RAG) First
-- For factual or operational answers, ground responses in trusted sources (repo docs, command output, approved knowledge bases, approved APIs).
-- Use this constraint pattern: "Using only the provided sources, answer the question. If the answer is not present, state that you do not know."
-- If sources are missing, stale, or inconclusive, say you do not know and request/perform retrieval instead of guessing.
-
-### 2. Strict Prompt Engineering
-- Prefer precise, constraint-based prompts over open-ended prompts.
-- Always prefer truthful uncertainty over fabrication: it is better to say "I don't know" than to invent an answer.
-- For every material claim, include source attribution (file path, command output, or cited source).
-- When model controls are available, use low temperature for factual tasks (target 0.0-0.3).
-
-### 3. Stepwise Verification (CoT/CoVe)
-- Perform step-by-step reasoning internally for non-trivial tasks.
-- For high-impact outputs, run a verification pass:
-  1. Draft answer.
-  2. Generate verification questions about the draft.
-  3. Answer those questions against sources.
-  4. Revise or downgrade confidence before finalizing.
-- If verification fails or sources conflict, return uncertainty explicitly and avoid definitive claims.
-
-### 4. Technical Guardrails
-- When tooling supports it, provide a confidence score (0-10) for non-trivial conclusions.
-- If confidence is low (below 7/10) or evidence is weak, flag for human review or return "I don't know."
-- Use grounding/semantic consistency checks where available to ensure responses align with trusted source material.
-
-### 5. Multi-Agent Critique Pattern
-- For important tasks, use a generator + skeptic workflow before delivery.
-- Example pattern: implementation agent produces output; reviewer agent audits for factual errors, logic gaps, and policy violations.
-- Deliver only after critic/review pass is complete (or clearly state residual risks).
+- Ground material factual/operational claims in trusted docs, commands or APIs and cite the evidence. If evidence is absent, stale, conflicting or inconclusive, retrieve it or state uncertainty; do not invent an answer.
+- Use precise task constraints. Reason internally for non-trivial work; for high-impact conclusions, draft, check the material claims against sources, then revise or downgrade confidence. Use grounding/consistency checks where available.
+- Where the model supports those controls, use low temperature (0.0–0.3) for factual tasks. Where tooling supports meaningful confidence scores, use 0–10; below 7 or with weak evidence, flag for review or say you do not know.
+- For important work, use a generator + skeptic before delivery. Normally use one bounded review of the proposed artifact and necessary evidence, rather than duplicating the whole investigation/history. Re-review material changes or unresolved findings. Complete review before delivery or explicitly state the residual risks.
+- Reuse unchanged source evidence and valid proof, but refresh live state when stale or before consequential action. Missing context after compaction can require a targeted reread; neither elapsed time nor compaction alone justifies repeating the full investigation.
+- Budget pressure never authorizes skipped safeguards or proof. Account for coordinator, reviewer, retries and reporting in an agreed budget; reserve room for completion and surface an insufficient remainder before more discretionary work. If required work cannot fit, report it incomplete. Measurements remain passive under the development-loop policy.

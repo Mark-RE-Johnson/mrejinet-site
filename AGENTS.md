@@ -1,52 +1,29 @@
 # AGENTS.md instructions for this repository
 
 ## Core Baseline
-- Apply `CORE_AGENT_RULES.md` first. It owns shared safety, dev workspace, privileged command, anti-ambiguity, MCP, and validation policy.
-- Planner selection and the runner's exact-terminal-HEAD PASS manifest own development proof; this overlay must not invent a parallel proof sequence.
-- This file is the Codex overlay for GPT-5.4+/ChatGPT-oriented MCP behavior.
-- If `AGENTS-REPO.md` exists, read it after this file for repo-local routing, validation, and deployment notes.
-- If guidance conflicts, `CORE_AGENT_RULES.md` wins, then this file, then `AGENTS-REPO.md`.
-- When a prompt contains a `DEVJOB-*` reference, run `pidns-job resume <id>` before acting, read current canonical policy rather than requesting pasted instructions, and show the literal request, objective, current state, and next action. A continuation-note defect is advisory; Git/workspace truth remains recoverable.
+- Read `CORE_AGENT_RULES.md` first. It owns shared safety, authority, workspace/source isolation, validation and publication; this file adds Codex mechanics. Then read `AGENTS-REPO.md` when present for project facts and pre-action document routing.
+- The runner's exact-terminal-HEAD PASS manifest and planner selection own development proof; do not introduce a competing proof sequence.
+- CORE wins conflicts, then this overlay, then repo-local guidance. A continuation-note defect is advisory: for `DEVJOB-*`, use CORE's resume rule and show the literal request, objective, current state and next action.
+- Keep this overlay identical across managed policy targets. Shared rules stay in CORE, project facts in `AGENTS-REPO.md`, working habits in the global voice. Use the existing policy-sync owner rather than copying rules here.
 
-## Overlay Scope
-- Keep this shared Codex overlay consistent across repos; repo-specific facts belong in `AGENTS-REPO.md`.
-- Keep repo-specific routing and deployment facts in `AGENTS-REPO.md`.
-- Keep shared policy canonical in `CORE_AGENT_RULES.md`; do not copy whole shared sections here just to restate them.
-- Prefer repo-native docs, scripts, CI config, and package/build metadata when repo-local docs point to them.
+## Codex Project and Plugin Scope
+- Trusted local projects load `.codex/config.toml` from their deliberate primary folder. The repo overlay names that root and its reviewed MCP set. The project file owns portable enable/disable overrides only; user config owns registrations, commands, URLs, environment and credentials.
+- Project config does not select named user profiles. ChatGPT Projects and secondary folders do not discover it. A different MCP set requires a reviewed project definition and a genuinely new trusted task; changing a global profile does not prove a task inherited it.
+- Retain app-owned `node_repl` for Browser/Chrome. Computer Use is a separate plugin, never a project `mcp_servers` override. Tool registration is distinct from an attached, working browser backend.
+- Keep ordinary tasks lean: specialist Cloudflare, iOS, Google workspace/Gmail, Sentry, Documents/Spreadsheets/Presentations and Codex Security plugins stay disabled unless needed. Changes apply to newly started tasks, not an already loaded task; avoid unverified plugin/profile handoff claims.
 
-## Codex Project MCP Surface
-- A trusted local project loads the versioned `.codex/config.toml` from its deliberate primary folder. Exact project servers and primary-folder identity belong in `AGENTS-REPO.md`.
-- The project file owns only portable MCP enable/disable overrides. User-level Codex config remains the authority for commands, URLs, environment, credentials, and registrations.
-- Reviewed local-project definitions keep app-owned `node_repl` enabled because the Browser and Chrome plugins require it. Computer Use remains a separate plugin surface and must not appear as a project `mcp_servers` override.
-- Project config does not select named user profiles. ChatGPT Projects and secondary local-project folders do not discover this file.
-- Global `pidns-mcp-toggle` profiles remain useful registration/deployment vocabulary for other agents, but global Codex profile switching is not reliable task routing and must not drive a handoff.
-- A different Codex MCP set requires a reviewed project-local definition and a genuinely new trusted local task. Do not mutate a global profile and claim that a spawned task inherited it.
-- Do not run MCP status checks at task start, after context compaction, or as routine preflight. Check observed tool availability only when it is material.
-
-## Codex Plugin Loadout
-- Keep ordinary Codex threads lean. Specialist plugins such as Cloudflare, iOS, Google workspace, Gmail, Sentry, Documents, Spreadsheets, Presentations, and Codex Security should stay disabled by default unless the task explicitly needs them.
-- Plugin changes affect newly started tasks, not an already-loaded task. Do not combine plugin changes with an unverified MCP-profile handoff claim.
-
-## GPT-5.4+ MCP Operating Model
-- Assume tool search and stronger multi-step planning are available, but keep the active tool surface as small as the task allows.
-- Separate deploy/registration truth from runtime exposure: maintain the full supported catalog, expose only what the current phase needs.
-- Keep read/search/fetch tools separated from write/action tools where approvals or allow-lists are available.
-- Keep tool descriptions concise, explicit, and non-overlapping so tool search can choose reliably.
-- For ChatGPT apps, treat local CLI MCP registration and ChatGPT remote apps as different delivery targets with different trust and approval surfaces.
-
-## Codex Native vs MCP
-- Prefer native Codex capabilities when they clearly beat MCP: `exec_command` + `rg` for plain-text/file search, built-in `web` for broad web research, and shell `git` for normal repo-local Git work.
-- Prefer MCP when the capability is semantic or domain-specific: `cclsp`, `bash-intel`, `ast-grep`, and `jcodemunch` for code intelligence; `playwright`, `sqlite`, `prometheus`, and `homeassistant-*` for specialized systems.
-- Treat `fetch` as secondary to built-in `web` for broad internet research. Use `fetch` for deterministic single-URL retrieval or workflows that require that MCP server.
-- Treat `context7` as higher priority than generic web search for package/framework API docs when the active profile exposes it.
-- Treat `pidns-docs` as the preferred read-only MCP for cross-repo or allowlisted local documentation lookup. Use `rg` first for a known local repo/path.
-- Prefer `jcodemunch` over `pidns-docs` `scope="all"` for indexed code/text search in repos with an existing jcodemunch index.
-- For jcodemunch local repositories, start with `list_repos`; if the target local path is missing or stale, use `index_folder`. Use `index_repo` only for GitHub owner/repo strings or GitHub URLs.
+## Native and MCP Selection
+- Use `exec_command` with `rg` / `rg --files` for local plain text/files, shell Git for normal repository operations, and built-in web for broad research. `fetch` is secondary except for deterministic URL retrieval or a server-specific workflow.
+- Follow CORE's semantic MCP/discovery policy. Prefer exposed Context7 for package/framework docs and `pidns-docs` for cross-repo/allowlisted local documents. For indexed code/text, prefer jcodemunch to `pidns-docs scope="all"`; start local index discovery with `list_repos`, then `index_folder` if needed.
+- Keep read/search and write/action tools separate under applicable authority. Keep descriptions concise and non-overlapping; expose what the phase needs instead of activating the entire deployable catalog. CLI MCP registrations and ChatGPT remote apps are different delivery/trust surfaces.
 
 ## File-Type Routing
-- Bash/Zsh: use `bash-intel` first for function index, source graph, call hierarchy, and scope-aware references; use exact-name/paginated index discovery and pass the selected absolute definition file/line when a function name has duplicates. Duplicate-name incoming calls are potential name-based callers because runtime source order cannot be resolved statically. Use `ast-grep` for structural shell queries; use `cclsp` for concrete definition/hover/diagnostics.
-- Python: use `jcodemunch` first for repo-wide symbol discovery, outlines, and source retrieval; use `cclsp` for definition/reference/rename/hover/diagnostics; use `bash-intel` for call hierarchy.
-- TypeScript/JavaScript: use `jcodemunch` first for symbol discovery/source extraction and `ast-grep` for structural queries; use `cclsp` only if a TS/JS language server is configured.
-- JSON/YAML/TOML: use `ast-grep` for structural matching and `rg` for plain text.
-- Markdown/plain text/CSV/TSV: use `rg` first for current-workspace docs/data; use `pidns-docs` only for cross-repo or allowlisted local lookup.
-- HTML/CSS: use `ast-grep` or `rg` for source inspection; use browser automation only when rendered behavior matters.
+- **Bash/Zsh:** `bash-intel` first for function indexes, source graphs, hierarchy and scoped references; `ast-grep` for structure; `cclsp` for concrete definition/hover/diagnostics. With duplicate function names, use exact-name/paginated discovery and the selected absolute definition file/line. Incoming duplicate-name calls are potential matches; static analysis cannot establish runtime source order.
+- **Python:** jcodemunch for repository symbols/outlines/source, cclsp for concrete definition/reference/rename/hover/diagnostics, bash-intel for hierarchy.
+- **TypeScript/JavaScript:** jcodemunch for symbols/source and ast-grep for structure; cclsp only when an appropriate language server is configured.
+- **JSON/YAML/TOML:** ast-grep for structure; rg for text. **Markdown/CSV/plain text:** rg locally, pidns-docs for cross-repo/allowlisted lookup. **HTML/CSS:** ast-grep or rg; browser automation when rendered behavior matters.
+
+## Execution Mechanics
+- Batch independent searches/reads and inspect each result. Bound excerpts to the question; keep full logs/artifacts outside history and fetch more when needed. Sequence dependent changes, approvals and validation.
+- Reuse available unchanged guidance and valid evidence; reread missing/changed context and refresh live evidence under CORE. Do not repeat startup surveys, MCP status checks or a full investigation after compaction.
+- Keep useful progress updates and a self-contained result. Use native usage records for budget observations, distinguishing cached input, reasoning/output subsets and account allowance. A subprocess-only total is not the whole task budget; CORE retains completion/review and budget safeguards.
