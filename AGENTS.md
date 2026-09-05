@@ -1,7 +1,7 @@
 # AGENTS.md instructions for this repository
 
 ## Core Baseline
-- Read `CORE_AGENT_RULES.md` first. It owns shared safety, authority, workspace/source isolation, validation and publication; this file adds Codex mechanics. Then read `AGENTS-REPO.md` when present for project facts and pre-action document routing.
+- Read `CORE_AGENT_RULES.md` first, including its mandatory Simplicity and Deletion First decision. CORE owns shared safety, authority, workspace/source isolation, validation and publication; this file adds Codex mechanics. Then read `AGENTS-REPO.md` when present for project facts and pre-action document routing.
 - The runner's exact-terminal-HEAD PASS manifest and planner selection own development proof; do not introduce a competing proof sequence.
 - CORE wins conflicts, then this overlay, then repo-local guidance. A continuation-note defect is advisory: for `DEVJOB-*`, use CORE's resume rule and show the literal request, objective, current state and next action.
 - Keep this overlay identical across managed policy targets. Shared rules stay in CORE, project facts in `AGENTS-REPO.md`, working habits in the global voice. Use the existing policy-sync owner rather than copying rules here.
