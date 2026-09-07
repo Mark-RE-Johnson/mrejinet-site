@@ -26,9 +26,12 @@ hugo server --buildDrafts
 - The old `pidns-promote release --mrejinet-site` route, direct `git push`, and
   manual `wrangler deploy` remain retired. Do not use aliases or ad-hoc
   copy/sync commands to bypass the typed GitOps adapter.
-- Finish owns terminal validation, integration, the exact Git publication
-  receipt, the Cloudflare commit/version/deployment proof, and the final
-  Access/DNS/content audit.
+- Finish owns terminal validation, integration and the exact Git publication
+  receipt. Changes to Hugo's configured content sources, Workers inputs or
+  deployment metadata also select the Cloudflare commit/version/deployment
+  proof and final Access/DNS/content audit. Internal documentation publishes
+  source without selecting those runtime checks; Markdown under a configured
+  Hugo content source is deployed content.
 - If the shared workflow is unavailable, stop and report the gap. Do not restore
   the retired route implicitly.
 
