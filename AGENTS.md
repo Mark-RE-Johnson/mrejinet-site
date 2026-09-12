@@ -24,6 +24,5 @@
 - **JSON/YAML/TOML:** ast-grep for structure; rg for text. **Markdown/CSV/plain text:** rg locally, pidns-docs for cross-repo/allowlisted lookup. **HTML/CSS:** ast-grep or rg; browser automation when rendered behavior matters.
 
 ## Execution Mechanics
-- Batch independent searches/reads and inspect each result. Bound excerpts to the question; keep full logs/artifacts outside history and fetch more when needed. Sequence dependent changes, approvals and validation.
-- Reuse available unchanged guidance and valid evidence; reread missing/changed context and refresh live evidence under CORE. Do not repeat startup surveys, MCP status checks or a full investigation after compaction.
-- Keep useful progress updates and a self-contained result. Use native usage records for budget observations, distinguishing cached input, reasoning/output subsets and account allowance. A subprocess-only total is not the whole task budget; CORE retains completion/review and budget safeguards.
+- Global `AGENT_VOICE.md` owns working habits; CORE owns execution authority and proof.
+- Use native usage records for budget observations, distinguishing cached input, reasoning/output subsets and account allowance. A subprocess-only total is not the whole task budget.
