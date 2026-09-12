@@ -5,6 +5,7 @@ Read this file after `AGENTS.md`. This file holds repo-local guidance for the we
 ## Repo Intent
 - Hugo static site for `mrejinet.co.uk`.
 - Source includes content, layouts, assets, and deploy metadata.
+- Preserve security headers and redirects under `static/`.
 
 ## Task Routing (Read Before Acting)
 - `/Users/mark/bin/documents/PIDNS-WEBSITE-SOLUTION.md` for deployment mode and Cloudflare behavior.
