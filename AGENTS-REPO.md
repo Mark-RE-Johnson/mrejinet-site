@@ -1,6 +1,6 @@
 # AGENTS-REPO.md instructions for /Users/mark/Projects/mrejinet-site
 
-Read this file after `AGENTS.md`. This file holds repo-local guidance for the website repo.
+Apply `CORE_AGENT_RULES.md` and the current runtime overlay first. This file holds repo-local guidance for the website repo.
 
 ## Repo Intent
 - Hugo static site for `mrejinet.co.uk`.
