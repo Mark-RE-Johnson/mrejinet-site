@@ -1,6 +1,6 @@
 ---
 title: "PiDNS Portal"
-# Data used by layouts/index.html to render the card grid
+# Portal card data rendered by layouts/index.html
 
 services:
   - name: "PiDNS Grafana"
